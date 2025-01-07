@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { User } = require('../../db/models'); //! проверить пути
 const bcrypt = require('bcrypt');
-const generateToken = require('../routers/token.router');
+const generateToken = require('../utils/generateToken');
 const cookieConfig = require('../configs/cookieConfig');
 
 router.post('/signup', async (req, res) => {
