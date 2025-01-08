@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './utils/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -13,42 +12,72 @@ import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './utils/ProtectedRoute';
 
 const App = () => {
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Проверяем, есть ли токен в localStorage при загрузке приложения
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  // Функция для входа пользователя
+  const login = (userData) => {
+    setUser(userData);
+    setIsAuthenticated(true);
+    localStorage.setItem('accessToken', userData.accessToken);
+  };
+
+  // Функция для выхода пользователя
+  const logout = () => {
+    setUser(null);
+    setIsAuthenticated(false);
+    localStorage.removeItem('accessToken');
+  };
+
   return (
-    <AuthProvider>
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route
-            path="/quests"
-            element={
-              <ProtectedRoute>
-                <AllQuests />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/quests/:id" element={<QuestPage />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route
-            path="/add-quest"
-            element={
-              <ProtectedRoute>
-                <AddQuestPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <ProfilePage />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-        <Footer />
-      </Router>
-    </AuthProvider>
+    <Router>
+      <Header user={user} isAuthenticated={isAuthenticated} logout={logout} />
+      <Routes>
+        {/* Главная страница доступна всем */}
+        <Route path="/" element={<HomePage />} />
+
+        {/* Защищенные маршруты */}
+        <Route
+          path="/quests"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <AllQuests />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-quest"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <AddQuestPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <ProfilePage user={user} />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Страница входа доступна всем */}
+        <Route path="/auth" element={<AuthPage login={login} />} />
+
+        {/* Страница квеста доступна всем */}
+        <Route path="/quests/:id" element={<QuestPage />} />
+      </Routes>
+      <Footer />
+    </Router>
   );
 };
 

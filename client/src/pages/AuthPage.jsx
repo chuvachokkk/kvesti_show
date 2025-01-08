@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import {
   Tabs,
   Tab,
@@ -10,9 +10,8 @@ import {
 } from 'react-bootstrap';
 import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../utils/AuthContext';
 
-const AuthForm = () => {
+const AuthPage = ({ login }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -20,7 +19,6 @@ const AuthForm = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,7 +58,7 @@ const AuthForm = () => {
   return (
     <Container
       className="d-flex justify-content-center align-items-center"
-      style={{ minHeight: '100vh' }} // Минимальная высота контейнера — на всю высоту экрана
+      style={{ minHeight: '100vh' }}
     >
       <div style={{ width: '100%', maxWidth: '400px' }}>
         <h1 className="text-center">
@@ -143,7 +141,6 @@ const AuthForm = () => {
           </Tab>
         </Tabs>
 
-        {/* Компонент Toast для отображения уведомлений */}
         <ToastContainer position="top-center" className="p-3">
           <Toast
             show={showToast}
@@ -165,4 +162,4 @@ const AuthForm = () => {
   );
 };
 
-export default AuthForm;
+export default AuthPage;

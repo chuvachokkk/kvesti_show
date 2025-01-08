@@ -1,11 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../utils/AuthContext'; // Импорт только один раз
 import { Tab, Nav } from 'react-bootstrap';
 
-const Header = () => {
-  const { user, isAuthenticated, logout } = useContext(AuthContext);
-
+const Header = ({ user, isAuthenticated, logout }) => {
   return (
     <header>
       <Tab.Container defaultActiveKey="home">

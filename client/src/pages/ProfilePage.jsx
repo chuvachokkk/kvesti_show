@@ -1,5 +1,4 @@
-import React, { useContext, useState } from 'react';
-import { AuthContext } from '../utils/AuthContext';
+import React, { useState } from 'react';
 import {
   Form,
   Button,
@@ -12,16 +11,14 @@ import {
 } from 'react-bootstrap';
 import axiosInstance from '../utils/axiosInstance';
 
-const ProfilePage = () => {
-  const { user, login } = useContext(AuthContext);
+const ProfilePage = ({ user }) => {
   const [username, setUsername] = useState(user?.username || '');
   const [password, setPassword] = useState('');
   const [profileImage, setProfileImage] = useState(user?.profileImage || '');
-  const [userQuests, setUserQuests] = useState([]); // Список квестов, добавленных пользователем
+  const [userQuests, setUserQuests] = useState([]);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  // Загрузка квестов пользователя при загрузке страницы
   React.useEffect(() => {
     if (user) {
       fetchUserQuests();
@@ -46,7 +43,6 @@ const ProfilePage = () => {
         password,
         profileImage,
       });
-      login(response.data); // Обновляем данные пользователя в контексте
       setMessage('Профиль успешно обновлен!');
       setError('');
     } catch (error) {

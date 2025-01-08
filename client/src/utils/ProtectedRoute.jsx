@@ -1,11 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../utils/AuthContext';
 
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useContext(AuthContext);
-
-  // Если пользователь не авторизован, перенаправляем на главную страницу
+const ProtectedRoute = ({ isAuthenticated, children }) => {
+  // Если пользователь не авторизован, перенаправляем его на главную страницу
   if (!isAuthenticated) {
     return <Navigate to="/" replace />;
   }
