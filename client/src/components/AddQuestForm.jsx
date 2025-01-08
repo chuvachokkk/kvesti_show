@@ -10,9 +10,11 @@ const AddQuestForm = () => {
   const [ageLimit, setAgeLimit] = useState('');
   const [puzzlesCount, setPuzzlesCount] = useState('');
   const [features, setFeatures] = useState('');
+  const [image, setImage] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Обработка отправки формы с изображением
   };
 
   return (
@@ -70,6 +72,7 @@ const AddQuestForm = () => {
         value={features}
         onChange={(e) => setFeatures(e.target.value)}
       />
+      <input type="file" onChange={(e) => setImage(e.target.files[0])} />
       <button type="submit">Добавить</button>
     </form>
   );
