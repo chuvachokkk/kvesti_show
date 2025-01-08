@@ -16,9 +16,9 @@ const AuthForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const [activeTab, setActiveTab] = useState('login'); // Состояние для активной вкладки
-  const [showToast, setShowToast] = useState(false); // Состояние для отображения Toast
-  const [toastMessage, setToastMessage] = useState(''); // Сообщение для Toast
+  const [activeTab, setActiveTab] = useState('login');
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
@@ -42,7 +42,7 @@ const AuthForm = () => {
           ? 'Вход выполнен успешно!'
           : 'Регистрация прошла успешно!'
       );
-      setShowToast(true); // Показываем Toast
+      setShowToast(true);
 
       navigate('/');
     } catch (error) {
@@ -53,7 +53,7 @@ const AuthForm = () => {
       setToastMessage(
         'Ошибка при авторизации. Проверьте данные и попробуйте снова.'
       );
-      setShowToast(true); // Показываем Toast
+      setShowToast(true);
     }
   };
 

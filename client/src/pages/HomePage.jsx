@@ -20,7 +20,9 @@ const HomePage = () => {
 
   return (
     <div>
-      <h1>Добро пожаловать на сайт квестов!</h1>
+      <h1>Добро пожаловать на сайт квестов!
+          Нужно зарегестрироватся !
+      </h1>
       <QuestList quests={featuredQuests} />
       <Link to="/quests">Все квесты</Link>
       <Link to="/add-quest">Добавить квест</Link>
