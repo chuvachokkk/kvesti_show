@@ -4,7 +4,6 @@ import QuestList from '../components/QuestList';
 
 const HomePage = () => {
   const featuredQuests = [
-    // Пример данных
     {
       id: 1,
       title: 'Квест 1',

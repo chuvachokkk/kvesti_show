@@ -5,7 +5,6 @@ import QuestDetail from '../components/QuestDetail';
 const QuestPage = () => {
   const { id } = useParams();
   const quest = {
-    // Пример данных
     id: 1,
     title: 'Квест 1',
     description: 'Описание квеста 1',

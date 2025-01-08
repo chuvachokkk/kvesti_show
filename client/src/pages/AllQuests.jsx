@@ -3,7 +3,6 @@ import QuestList from '../components/QuestList';
 
 const AllQuests = () => {
   const allQuests = [
-    // Пример данных
     {
       id: 1,
       title: 'Квест 1',

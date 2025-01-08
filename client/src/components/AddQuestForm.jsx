@@ -13,7 +13,6 @@ const AddQuestForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Обработка отправки формы
   };
 
   return (

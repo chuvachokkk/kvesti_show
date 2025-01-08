@@ -3,7 +3,7 @@ import React from 'react';
 const Footer = () => {
   return (
     <footer>
-      <p>© 2025 Ваш сайт квестов. Все права защищены.</p>
+      <p>Придумать описание либо оставить телеграмм</p>
     </footer>
   );
 };
