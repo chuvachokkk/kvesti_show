@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Form,
   Button,
@@ -14,16 +14,10 @@ import axiosInstance from '../utils/axiosInstance';
 const ProfilePage = ({ user }) => {
   const [username, setUsername] = useState(user?.username || '');
   const [password, setPassword] = useState('');
-  const [profileImage, setProfileImage] = useState(user?.profileImage || '');
+  const [profileImage, setProfileImage] = useState(user?.avatar || '');
   const [userQuests, setUserQuests] = useState([]);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-
-  React.useEffect(() => {
-    if (user) {
-      fetchUserQuests();
-    }
-  }, [user]);
 
   const fetchUserQuests = async () => {
     try {
@@ -34,6 +28,12 @@ const ProfilePage = ({ user }) => {
       setError('Ошибка при загрузке квестов.');
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      fetchUserQuests();
+    }
+  }, [user]);
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
@@ -61,18 +61,22 @@ const ProfilePage = ({ user }) => {
     const file = e.target.files[0];
     if (file) {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('file', file); // Добавляем файл в FormData
 
       try {
+        const accessToken = localStorage.getItem('accessToken');
         const response = await axiosInstance.post(
           '/profile/upload-image',
           formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'multipart/form-data', // Указываем тип содержимого
             },
           }
         );
+
+        // Обновляем состояние с новым URL изображения
         setProfileImage(response.data.imageUrl);
         setMessage('Фото профиля успешно обновлено!');
         setError('');
@@ -92,7 +96,10 @@ const ProfilePage = ({ user }) => {
           <Col md={4} className="mb-4">
             <Card className="text-center p-3">
               <Image
-                src={profileImage || 'https://via.placeholder.com/150'}
+                src={
+                  profileImage ||
+                  'https://forum-ru-cdn.warthunder.com/original/3X/a/f/af62d76a2d92797df0711e6a94d319490936f3a1.jpeg'
+                } // Если изображения нет, используем заглушку
                 roundedCircle
                 fluid
                 className="mb-3"

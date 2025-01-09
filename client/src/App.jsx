@@ -37,14 +37,16 @@ const App = () => {
     localStorage.removeItem('accessToken');
   };
 
+  // Функция для обновления списка квестов
+  const handleQuestAdded = () => {
+    // Здесь можно обновить состояние, если нужно
+  };
+
   return (
     <Router>
       <Header user={user} isAuthenticated={isAuthenticated} logout={logout} />
       <Routes>
-        {/* Главная страница доступна всем */}
         <Route path="/" element={<HomePage />} />
-
-        {/* Защищенные маршруты */}
         <Route
           path="/quests"
           element={
@@ -57,7 +59,7 @@ const App = () => {
           path="/add-quest"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <AddQuestPage />
+              <AddQuestPage onQuestAdded={handleQuestAdded} />
             </ProtectedRoute>
           }
         />
@@ -69,11 +71,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
-        {/* Страница входа доступна всем */}
         <Route path="/auth" element={<AuthPage login={login} />} />
-
-        {/* Страница квеста доступна всем */}
         <Route path="/quests/:id" element={<QuestPage />} />
       </Routes>
       <Footer />

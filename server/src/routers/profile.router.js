@@ -6,15 +6,15 @@ const { User } = require('../../db/models');
 const { verifyAccessToken } = require('../middleware/verifyToken');
 
 const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, 'uploads/');
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Файлы будут сохраняться в папку uploads
   },
-  filename(req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); // Уникальное имя файла
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 // Обновление профиля
 router.put('/update', verifyAccessToken, async (req, res) => {
@@ -62,15 +62,17 @@ router.post(
         return res.status(404).json({ message: 'Пользователь не найден' });
       }
 
-      user.avatar = req.file.path;
+      // Сохраняем путь к изображению в базе данных
+      const imageUrl = `/uploads/${req.file.filename}`; // Используем только имя файла
+      user.avatar = imageUrl;
       await user.save();
 
-      res.json({ imageUrl: req.file.path });
+      res.json({ imageUrl }); // Возвращаем полный URL к изображению
     } catch (error) {
       console.error('Ошибка при загрузке изображения:', error);
       res.status(500).json({ message: 'Ошибка сервера' });
     }
-  },
+  }
 );
 
 module.exports = router;

@@ -13,21 +13,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Получить квест по ID
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    const quest = await Quest.findOne({ where: { id } });
-    if (!quest) {
-      return res.status(404).json({ message: 'Квест не найден' });
-    }
-    res.json(quest);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Ошибка сервера' });
-  }
-});
-
 // Получить квесты пользователя
 router.get('/user/:userId', verifyAccessToken, async (req, res) => {
   const { userId } = req.params;
@@ -48,34 +33,18 @@ router.get('/user/:userId', verifyAccessToken, async (req, res) => {
 
 // Создать новый квест
 router.post('/', verifyAccessToken, async (req, res) => {
-  const {
-    title,
-    description,
-    latitude,
-    longitude,
-    teamSize,
-    duration,
-    difficulty,
-    fearLevel,
-    ageLimit,
-    puzzlesCount,
-    features,
-  } = req.body;
-  const authorId = res.locals.user.id;
+  const { title, description, teamSize, duration, difficulty, ageLimit } =
+    req.body;
+  const authorId = res.locals.user.id; // ID пользователя из токена
 
   try {
     const quest = await Quest.create({
       title,
       description,
-      latitude,
-      longitude,
       teamSize,
       duration,
       difficulty,
-      fearLevel,
       ageLimit,
-      puzzlesCount,
-      features,
       authorId,
     });
 
