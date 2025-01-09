@@ -7,55 +7,59 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       title: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       description: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
       },
       latitude: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
       },
       longitude: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
       },
       teamSize: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       duration: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       difficulty: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       fearLevel: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       ageLimit: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       puzzlesCount: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       features: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
       },
       authorId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Quests');
-  }
+  },
 };

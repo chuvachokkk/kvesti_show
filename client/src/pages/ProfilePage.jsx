@@ -23,8 +23,13 @@ const ProfilePage = ({ user }) => {
     try {
       const response = await axiosInstance.get(`/quests/user/${user.id}`);
       setUserQuests(response.data);
+      console.log('Fetching quests for user ID:', user.id);
+      console.log('Quests data:', response.data); // Логируем данные квестов
     } catch (error) {
       console.error('Ошибка при загрузке квестов:', error);
+      if (error.response) {
+        console.error('Данные ошибки:', error.response.data);
+      }
       setError('Ошибка при загрузке квестов.');
     }
   };

@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 });
 
 // Получить квесты пользователя
-router.get('/user/:userId', verifyAccessToken, async (req, res) => {
+router.get('/user/:userId', async (req, res) => {
   const { userId } = req.params;
 
   try {
@@ -33,8 +33,7 @@ router.get('/user/:userId', verifyAccessToken, async (req, res) => {
 
 // Создать новый квест
 router.post('/', verifyAccessToken, async (req, res) => {
-  const { title, description, teamSize, duration, difficulty, ageLimit } =
-    req.body;
+  const { title, description, teamSize, duration, difficulty, ageLimit } = req.body;
   const authorId = res.locals.user.id; // ID пользователя из токена
 
   try {
