@@ -71,6 +71,7 @@ router.post('/signin', async (req, res) => {
   }
 });
 
+
 // Маршрут для выхода
 router.get('/logout', (req, res) => {
   try {

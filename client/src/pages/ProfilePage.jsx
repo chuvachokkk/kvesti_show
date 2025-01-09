@@ -38,11 +38,16 @@ const ProfilePage = ({ user }) => {
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.put('/user/update', {
-        username,
-        password,
-        profileImage,
-      });
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await axiosInstance.put(
+        '/profile/update',
+        { username, password },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       setMessage('Профиль успешно обновлен!');
       setError('');
     } catch (error) {
@@ -60,7 +65,7 @@ const ProfilePage = ({ user }) => {
 
       try {
         const response = await axiosInstance.post(
-          '/user/upload-image',
+          '/profile/upload-image',
           formData,
           {
             headers: {

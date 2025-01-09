@@ -4,7 +4,11 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const app = express();
 const cors = require('cors');
+
 const authRouter = require('./routers/auth.router');
+const profileRouter = require('./routers/profile.router');
+const questRouter = require('./routers/quest.router');
+const tokenRouter = require('./routers/token.router');
 
 const PORT = process.env.PORT;
 
@@ -18,7 +22,11 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 app.use('/api/auth', authRouter);
+app.use('/api/profile', profileRouter);
+app.use('/api/quests', questRouter);
+app.use('/api/token', tokenRouter);
 
 app.listen(PORT, () => {
   console.log(`Server started at ${PORT} port`);

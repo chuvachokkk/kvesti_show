@@ -14,13 +14,18 @@ const verifyRefreshToken = (req, res, next) => {
 
 const verifyAccessToken = (req, res, next) => {
   try {
-    const accessToken = req.headers.authorization.split(' ')[1];
-    const { user } = jwt.verify(accessToken, process.env.SECRET_ACCESS_TOKEN);
-    res.locals.user = user;
-    next();
+    const accessToken = req.headers.authorization?.split(' ')[1]; // Получаем токен из заголовка
+
+    if (!accessToken) {
+      return res.sendStatus(401); // Токен отсутствует
+    }
+
+    const { user } = jwt.verify(accessToken, process.env.SECRET_ACCESS_TOKEN); // Проверяем токен
+    res.locals.user = user; // Сохраняем данные пользователя
+    next(); // Передаём управление следующему middleware
   } catch (error) {
     console.log('Invalid access token');
-    res.sendStatus(401);
+    res.sendStatus(401); // Токен недействителен
   }
 };
 
