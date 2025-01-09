@@ -28,16 +28,25 @@ const AddQuestPage = ({ onQuestAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Проверяем, что обязательные поля заполнены
+    if (!title) {
+      setToastMessage('Название квеста обязательно');
+      setShowToast(true);
+      return;
+    }
+
     const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('teamSize', teamSize);
-    formData.append('duration', duration);
-    formData.append('difficulty', difficulty);
-    formData.append('ageLimit', ageLimit);
-    formData.append('rating', rating); // Добавляем рейтинг в FormData
-    if (image) {
-      formData.append('file', image); // Добавляем изображение в FormData
+    formData.append('title', 'Test Quest');
+    formData.append('description', 'This is a test quest');
+    formData.append('teamSize', 2);
+    formData.append('duration', 60);
+    formData.append('difficulty', 3);
+    formData.append('ageLimit', 14);
+    formData.append('rating', 4);
+    if (image && !image.type.startsWith('image/')) {
+      setToastMessage('Пожалуйста, загрузите изображение');
+      setShowToast(true);
+      return;
     }
 
     try {
@@ -57,7 +66,16 @@ const AddQuestPage = ({ onQuestAdded }) => {
       }
     } catch (error) {
       console.error('Ошибка при создании квеста:', error);
-      setToastMessage('Ошибка при создании квеста');
+
+      // Отображаем сообщение об ошибке от сервера
+      if (error.response && error.response.data) {
+        setToastMessage(
+          error.response.data.message || 'Ошибка при создании квеста'
+        );
+      } else {
+        setToastMessage('Ошибка при создании квеста');
+      }
+
       setShowToast(true);
     }
   };

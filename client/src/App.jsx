@@ -37,19 +37,16 @@ const App = () => {
     localStorage.removeItem('accessToken');
   };
 
-  // Функция для обновления списка квестов
-  const handleQuestAdded = () => {
-    // Здесь можно обновить состояние, если нужно
+  // Функция для обновления данных пользователя
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
   };
 
   return (
     <Router>
-      {/* Основной контейнер с Flexbox */}
       <div className="d-flex flex-column min-vh-100">
-        {/* Хедер */}
+        {/* Передаём данные пользователя в Header */}
         <Header user={user} isAuthenticated={isAuthenticated} logout={logout} />
-
-        {/* Основной контент с отступом снизу */}
         <div className="flex-grow-1 pb-5">
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -65,7 +62,7 @@ const App = () => {
               path="/add-quest"
               element={
                 <ProtectedRoute isAuthenticated={isAuthenticated}>
-                  <AddQuestPage onQuestAdded={handleQuestAdded} />
+                  <AddQuestPage />
                 </ProtectedRoute>
               }
             />
@@ -73,7 +70,7 @@ const App = () => {
               path="/profile"
               element={
                 <ProtectedRoute isAuthenticated={isAuthenticated}>
-                  <ProfilePage user={user} />
+                  <ProfilePage user={user} updateUser={updateUser} />
                 </ProtectedRoute>
               }
             />
@@ -81,7 +78,6 @@ const App = () => {
             <Route path="/quests/:id" element={<QuestPage />} />
           </Routes>
         </div>
-
         <Footer className="mt-auto" />
       </div>
     </Router>
