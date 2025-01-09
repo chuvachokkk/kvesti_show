@@ -1,51 +1,41 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Tab, Nav } from 'react-bootstrap';
+import { Navbar, Nav, Container } from 'react-bootstrap';
 
 const Header = ({ user, isAuthenticated, logout }) => {
   return (
-    <header>
-      <Tab.Container defaultActiveKey="home">
-        <Nav variant="tabs" className="justify-content-center">
-          <Nav.Item>
-            <Nav.Link as={Link} to="/" eventKey="home">
-              Главная
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link as={Link} to="/quests" eventKey="quests">
+    <Navbar bg="dark" variant="dark" expand="lg">
+      <Container>
+        <Navbar.Brand as={Link} to="/">
+          Квесты
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link as={Link} to="/quests">
               Все квесты
             </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link as={Link} to="/add-quest" eventKey="add-quest">
+            <Nav.Link as={Link} to="/add-quest">
               Добавить квест
             </Nav.Link>
-          </Nav.Item>
-
-          {isAuthenticated && user ? (
-            <>
-              <Nav.Item>
-                <Nav.Link as={Link} to="/profile" eventKey="profile">
+          </Nav>
+          <Nav>
+            {isAuthenticated && user ? (
+              <>
+                <Nav.Link as={Link} to="/profile">
                   Личный кабинет
                 </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link onClick={logout} eventKey="logout">
-                  Выйти
-                </Nav.Link>
-              </Nav.Item>
-            </>
-          ) : (
-            <Nav.Item>
-              <Nav.Link as={Link} to="/auth" eventKey="auth">
+                <Nav.Link onClick={logout}>Выйти</Nav.Link>
+              </>
+            ) : (
+              <Nav.Link as={Link} to="/auth">
                 Войти
               </Nav.Link>
-            </Nav.Item>
-          )}
-        </Nav>
-      </Tab.Container>
-    </header>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 

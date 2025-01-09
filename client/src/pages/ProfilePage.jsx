@@ -23,13 +23,8 @@ const ProfilePage = ({ user }) => {
     try {
       const response = await axiosInstance.get(`/quests/user/${user.id}`);
       setUserQuests(response.data);
-      console.log('Fetching quests for user ID:', user.id);
-      console.log('Quests data:', response.data); // Логируем данные квестов
     } catch (error) {
       console.error('Ошибка при загрузке квестов:', error);
-      if (error.response) {
-        console.error('Данные ошибки:', error.response.data);
-      }
       setError('Ошибка при загрузке квестов.');
     }
   };
@@ -66,7 +61,7 @@ const ProfilePage = ({ user }) => {
     const file = e.target.files[0];
     if (file) {
       const formData = new FormData();
-      formData.append('file', file); // Добавляем файл в FormData
+      formData.append('file', file);
 
       try {
         const accessToken = localStorage.getItem('accessToken');
@@ -76,12 +71,11 @@ const ProfilePage = ({ user }) => {
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
-              'Content-Type': 'multipart/form-data', // Указываем тип содержимого
+              'Content-Type': 'multipart/form-data',
             },
           }
         );
 
-        // Обновляем состояние с новым URL изображения
         setProfileImage(response.data.imageUrl);
         setMessage('Фото профиля успешно обновлено!');
         setError('');
@@ -99,12 +93,9 @@ const ProfilePage = ({ user }) => {
       {user ? (
         <Row>
           <Col md={4} className="mb-4">
-            <Card className="text-center p-3">
+            <Card className="text-center p-3 shadow-sm">
               <Image
-                src={
-                  profileImage ||
-                  'https://forum-ru-cdn.warthunder.com/original/3X/a/f/af62d76a2d92797df0711e6a94d319490936f3a1.jpeg'
-                } // Если изображения нет, используем заглушку
+                src={profileImage || 'https://via.placeholder.com/150'}
                 roundedCircle
                 fluid
                 className="mb-3"
@@ -123,7 +114,7 @@ const ProfilePage = ({ user }) => {
             </Card>
           </Col>
           <Col md={8}>
-            <Card className="p-4">
+            <Card className="p-4 shadow-sm">
               <h3 className="mb-4">Редактирование профиля</h3>
               {message && <Alert variant="success">{message}</Alert>}
               {error && <Alert variant="danger">{error}</Alert>}
@@ -154,17 +145,16 @@ const ProfilePage = ({ user }) => {
               </Form>
             </Card>
 
-            <Card className="mt-4 p-4">
+            <Card className="mt-4 p-4 shadow-sm">
               <h3 className="mb-4">Добавленные квесты</h3>
               {userQuests.length > 0 ? (
                 <Row>
                   {userQuests.map((quest) => (
                     <Col key={quest.id} md={6} className="mb-4">
-                      <Card>
+                      <Card className="shadow-sm">
                         <Card.Img
                           variant="top"
-                          src={quest.image}
-                          alt={quest.title}
+                          src={quest.image || 'https://via.placeholder.com/300'}
                         />
                         <Card.Body>
                           <Card.Title>{quest.title}</Card.Title>

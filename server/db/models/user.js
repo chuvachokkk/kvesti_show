@@ -11,6 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       username: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
+      avatar: {
+        // Добавляем поле для аватара
+        type: DataTypes.STRING,
+        allowNull: true, // Можно оставить пустым, если аватар не обязательный
+      },
     },
     {
       sequelize,

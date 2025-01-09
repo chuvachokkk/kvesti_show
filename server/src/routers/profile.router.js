@@ -64,8 +64,13 @@ router.post(
 
       // Сохраняем путь к изображению в базе данных
       const imageUrl = `/uploads/${req.file.filename}`; // Используем только имя файла
-      user.avatar = imageUrl;
+      user.avatar = imageUrl; // Обновляем поле avatar
+
+      console.log('Перед сохранением:', user.get());
+
       await user.save();
+
+      console.log('После сохранения:', user.get());
 
       res.json({ imageUrl }); // Возвращаем полный URL к изображению
     } catch (error) {

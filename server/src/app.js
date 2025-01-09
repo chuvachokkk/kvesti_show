@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const path = require('path');
+const multer = require('multer');
 
 const authRouter = require('./routers/auth.router');
 const profileRouter = require('./routers/profile.router');

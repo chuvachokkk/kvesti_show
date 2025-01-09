@@ -44,37 +44,46 @@ const App = () => {
 
   return (
     <Router>
-      <Header user={user} isAuthenticated={isAuthenticated} logout={logout} />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route
-          path="/quests"
-          element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <AllQuests />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/add-quest"
-          element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <AddQuestPage onQuestAdded={handleQuestAdded} />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <ProfilePage user={user} />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/auth" element={<AuthPage login={login} />} />
-        <Route path="/quests/:id" element={<QuestPage />} />
-      </Routes>
-      <Footer />
+      {/* Основной контейнер с Flexbox */}
+      <div className="d-flex flex-column min-vh-100">
+        {/* Хедер */}
+        <Header user={user} isAuthenticated={isAuthenticated} logout={logout} />
+
+        {/* Основной контент с отступом снизу */}
+        <div className="flex-grow-1 pb-5">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route
+              path="/quests"
+              element={
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  <AllQuests />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/add-quest"
+              element={
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  <AddQuestPage onQuestAdded={handleQuestAdded} />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  <ProfilePage user={user} />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/auth" element={<AuthPage login={login} />} />
+            <Route path="/quests/:id" element={<QuestPage />} />
+          </Routes>
+        </div>
+
+        <Footer className="mt-auto" />
+      </div>
     </Router>
   );
 };

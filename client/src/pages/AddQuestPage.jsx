@@ -5,17 +5,22 @@ import {
   Container,
   Toast,
   ToastContainer,
+  Row,
+  Col,
 } from 'react-bootstrap';
 import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import StarRating from '../components/StarRating'; // Импортируем компонент рейтинга
 
 const AddQuestPage = ({ onQuestAdded }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [teamSize, setTeamSize] = useState(2);
+  const [teamSize, setTeamSize] = useState(1); // По умолчанию 1 человек
   const [duration, setDuration] = useState(60);
-  const [difficulty, setDifficulty] = useState(1);
+  const [difficulty, setDifficulty] = useState(1); // По умолчанию сложность 1
   const [ageLimit, setAgeLimit] = useState(14);
+  const [image, setImage] = useState(null); // Состояние для загрузки изображения
+  const [rating, setRating] = useState(1); // Состояние для рейтинга
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const navigate = useNavigate();
@@ -23,24 +28,26 @@ const AddQuestPage = ({ onQuestAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('teamSize', teamSize);
+    formData.append('duration', duration);
+    formData.append('difficulty', difficulty);
+    formData.append('ageLimit', ageLimit);
+    formData.append('rating', rating); // Добавляем рейтинг в FormData
+    if (image) {
+      formData.append('file', image); // Добавляем изображение в FormData
+    }
+
     try {
-      const accessToken = localStorage.getItem('accessToken'); // Получаем токен
-      const response = await axiosInstance.post(
-        '/quests',
-        {
-          title,
-          description,
-          teamSize,
-          duration,
-          difficulty,
-          ageLimit,
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await axiosInstance.post('/quests', formData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'multipart/form-data', // Указываем тип содержимого для загрузки файла
         },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`, // Добавляем токен в заголовок
-          },
-        }
-      );
+      });
 
       if (response.status === 201) {
         setToastMessage('Квест успешно создан!');
@@ -55,10 +62,17 @@ const AddQuestPage = ({ onQuestAdded }) => {
     }
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file); // Сохраняем выбранный файл
+    }
+  };
+
   return (
-    <Container>
-      <h2 className="text-center my-4">Добавить квест</h2>
-      <Form onSubmit={handleSubmit}>
+    <Container className="my-5">
+      <h2 className="text-center mb-4">Добавить квест</h2>
+      <Form onSubmit={handleSubmit} className="shadow p-4 bg-light rounded">
         <Form.Group className="mb-3" controlId="formTitle">
           <Form.Label>Название</Form.Label>
           <Form.Control
@@ -84,13 +98,19 @@ const AddQuestPage = ({ onQuestAdded }) => {
 
         <Form.Group className="mb-3" controlId="formTeamSize">
           <Form.Label>Количество человек</Form.Label>
-          <Form.Control
-            type="number"
-            placeholder="Введите количество человек"
-            value={teamSize}
-            onChange={(e) => setTeamSize(e.target.value)}
-            required
-          />
+          <Row>
+            {[1, 2, 3, 4, 5].map((size) => (
+              <Col key={size}>
+                <Button
+                  variant={teamSize === size ? 'primary' : 'outline-primary'}
+                  onClick={() => setTeamSize(size)}
+                  className="w-100 mb-2"
+                >
+                  {size}
+                </Button>
+              </Col>
+            ))}
+          </Row>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formDuration">
@@ -106,13 +126,19 @@ const AddQuestPage = ({ onQuestAdded }) => {
 
         <Form.Group className="mb-3" controlId="formDifficulty">
           <Form.Label>Сложность</Form.Label>
-          <Form.Control
-            type="number"
-            placeholder="Введите сложность (1-5)"
-            value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
-            required
-          />
+          <Row>
+            {[1, 2, 3, 4, 5].map((level) => (
+              <Col key={level}>
+                <Button
+                  variant={difficulty === level ? 'primary' : 'outline-primary'}
+                  onClick={() => setDifficulty(level)}
+                  className="w-100 mb-2"
+                >
+                  {level}
+                </Button>
+              </Col>
+            ))}
+          </Row>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formAgeLimit">
@@ -126,12 +152,25 @@ const AddQuestPage = ({ onQuestAdded }) => {
           />
         </Form.Group>
 
+        <Form.Group className="mb-3" controlId="formRating">
+          <Form.Label>Рейтинг</Form.Label>
+          <StarRating rating={rating} setRating={setRating} />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formImage">
+          <Form.Label>Загрузить изображение</Form.Label>
+          <Form.Control
+            type="file"
+            onChange={handleImageChange}
+            accept="image/*"
+          />
+        </Form.Group>
+
         <Button variant="primary" type="submit" className="w-100">
           Добавить квест
         </Button>
       </Form>
 
-      {/* Toast для уведомлений */}
       <ToastContainer position="top-end" className="p-3">
         <Toast
           show={showToast}

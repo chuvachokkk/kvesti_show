@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import QuestDetail from '../components/QuestDetail';
+import CommentsSection from '../components/CommentsSection';
 
 const QuestPage = () => {
   const { id } = useParams();
@@ -20,6 +21,7 @@ const QuestPage = () => {
   return (
     <div>
       <QuestDetail quest={quest} />
+      <CommentsSection questId={id} /> {/* Добавляем секцию комментариев */}
     </div>
   );
 };

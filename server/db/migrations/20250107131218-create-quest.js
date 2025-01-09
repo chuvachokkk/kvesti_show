@@ -1,3 +1,4 @@
+// Corrected Migration File
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -11,36 +12,47 @@ module.exports = {
       },
       title: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       description: {
         type: Sequelize.TEXT,
+        allowNull: false,
       },
       latitude: {
         type: Sequelize.FLOAT,
+        allowNull: true,
       },
       longitude: {
         type: Sequelize.FLOAT,
+        allowNull: true,
       },
       teamSize: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       duration: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       difficulty: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       fearLevel: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        allowNull: true,
       },
       ageLimit: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       puzzlesCount: {
         type: Sequelize.INTEGER,
+        allowNull: true,
       },
       features: {
         type: Sequelize.TEXT,
+        allowNull: true,
       },
       authorId: {
         type: Sequelize.INTEGER,
@@ -48,6 +60,8 @@ module.exports = {
           model: 'Users',
           key: 'id',
         },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
       },
       createdAt: {
         allowNull: false,

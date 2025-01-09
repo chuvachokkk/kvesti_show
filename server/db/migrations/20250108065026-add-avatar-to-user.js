@@ -1,15 +1,17 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn('Users', 'avatar', {
-      type: Sequelize.STRING, // Тип поля
-      allowNull: true, // Разрешаем NULL, если аватарка не обязательна
-    });
+  up: async (queryInterface, Sequelize) => {
+    const tableDescription = await queryInterface.describeTable('Users');
+    if (!tableDescription.avatar) {
+      await queryInterface.addColumn('Users', 'avatar', {
+        type: Sequelize.STRING,
+        allowNull: true,
+      });
+    }
   },
 
-  async down(queryInterface, Sequelize) {
+  down: async (queryInterface, Sequelize) => {
     await queryInterface.removeColumn('Users', 'avatar');
   },
 };
