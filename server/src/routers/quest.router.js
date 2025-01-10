@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Quest } = require('../../db/models');
+const { Quest, User } = require('../../db/models'); // Убедитесь, что User импортирован
 const { verifyAccessToken } = require('../middleware/verifyToken');
 const multer = require('multer');
 const path = require('path');
@@ -15,7 +15,8 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-// получение всего
+
+// Получение всех квестов
 router.get('/', async (req, res) => {
   try {
     const quests = await Quest.findAll();
@@ -25,7 +26,30 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 });
-// получение по id 
+
+// Получение квеста по ID
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const quest = await Quest.findByPk(id, {
+      include: [{ model: User, attributes: ['username'] }], // Включаем данные автора
+    });
+
+    if (!quest) {
+      return res.status(404).json({ message: 'Квест не найден' });
+    }
+
+    res.json(quest);
+  } catch (error) {
+    console.error('Ошибка при получении квеста:', error);
+    res.status(500).json({
+      message: 'Ошибка сервера',
+      error: error.message, // Отправляем сообщение об ошибке клиенту
+    });
+  }
+});
+
+// Получение квестов по ID пользователя
 router.get('/user/:userId', async (req, res) => {
   const { userId } = req.params;
 

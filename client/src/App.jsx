@@ -10,12 +10,12 @@ import AuthPage from './pages/AuthPage';
 import AddQuestPage from './pages/AddQuestPage';
 import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './utils/ProtectedRoute';
+import EditQuestPage from './pages/EditQuestPage'; // Импортируем новую страницу
 
 const App = () => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Проверяем, есть ли токен в localStorage при загрузке приложения
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (token) {
@@ -23,21 +23,18 @@ const App = () => {
     }
   }, []);
 
-  // Функция для входа пользователя
   const login = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
     localStorage.setItem('accessToken', userData.accessToken);
   };
 
-  // Функция для выхода пользователя
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem('accessToken');
   };
 
-  // Функция для обновления данных пользователя
   const updateUser = (updatedUser) => {
     setUser(updatedUser);
   };
@@ -45,7 +42,6 @@ const App = () => {
   return (
     <Router>
       <div className="d-flex flex-column min-vh-100">
-        {/* Передаём данные пользователя в Header */}
         <Header user={user} isAuthenticated={isAuthenticated} logout={logout} />
         <div className="flex-grow-1 pb-5">
           <Routes>
@@ -54,7 +50,7 @@ const App = () => {
               path="/quests"
               element={
                 <ProtectedRoute isAuthenticated={isAuthenticated}>
-                  <AllQuests />
+                  <AllQuests user={user} />
                 </ProtectedRoute>
               }
             />
@@ -76,6 +72,14 @@ const App = () => {
             />
             <Route path="/auth" element={<AuthPage login={login} />} />
             <Route path="/quests/:id" element={<QuestPage />} />
+            <Route
+              path="/quests/:id/edit"
+              element={
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  <EditQuestPage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </div>
         <Footer className="mt-auto" />

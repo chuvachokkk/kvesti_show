@@ -1,27 +1,43 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import QuestDetail from '../components/QuestDetail';
 import CommentsSection from '../components/CommentsSection';
+import { Button } from 'react-bootstrap';
+import axiosInstance from '../utils/axiosInstance';
 
-const QuestPage = () => {
+const QuestPage = ({ user }) => {
   const { id } = useParams();
-  const quest = {
-    id: 1,
-    title: 'Квест 1',
-    description: 'Описание квеста 1',
-    image: 'тут должна быть картинка',
-    teamSize: '2-4 человека',
-    duration: '60 минут',
-    difficulty: '2/3',
-    fearLevel: '2/3',
-    ageLimit: '14+',
-    puzzlesCount: 20,
-  };
+  const navigate = useNavigate();
+  const [quest, setQuest] = useState(null);
+
+  useEffect(() => {
+    const fetchQuest = async () => {
+      try {
+        const response = await axiosInstance.get(`/quests/${id}`);
+        setQuest(response.data);
+      } catch (error) {
+        console.error('Ошибка при загрузке квеста:', error);
+      }
+    };
+
+    fetchQuest();
+  }, [id]);
+
+  if (!quest) {
+    return <div>Загрузка...</div>;
+  }
+
+  const isAuthor = user && quest.authorId === user.id;
 
   return (
     <div>
       <QuestDetail quest={quest} />
-      <CommentsSection questId={id} /> {/* Добавляем секцию комментариев */}
+      {isAuthor && (
+        <Button onClick={() => navigate(`/quests/${id}/edit`)}>
+          Редактировать
+        </Button>
+      )}
+      <CommentsSection questId={id} />
     </div>
   );
 };

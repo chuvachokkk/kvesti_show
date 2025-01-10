@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import QuestList from '../components/QuestList';
 
-const HomePage = () => {
+const HomePage = ({ user }) => {
   const featuredQuests = [
     {
       id: 1,

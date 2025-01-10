@@ -1,6 +1,9 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
-const QuestDetail = ({ quest }) => {
+const QuestDetail = ({ quest, user }) => {
+  const isAuthor = user && quest.authorId === user.id;
+
   return (
     <div className="quest-detail">
       <h1>{quest.title}</h1>
@@ -17,6 +20,11 @@ const QuestDetail = ({ quest }) => {
           <li>Загадки: {quest.puzzlesCount}</li>
         </ul>
       </div>
+      {isAuthor && (
+        <Button onClick={() => navigate(`/quests/${quest.id}/edit`)}>
+          Редактировать
+        </Button>
+      )}
     </div>
   );
 };
