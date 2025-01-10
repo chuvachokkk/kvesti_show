@@ -4,7 +4,7 @@ const QuestDetail = ({ quest }) => {
   return (
     <div className="quest-detail">
       <h1>{quest.title}</h1>
-      <img src={quest.image} alt={quest.title} />
+      <img src={`http://localhost:3000${quest.image}`} alt={quest.title} />
       <p>{quest.description}</p>
       <div>
         <h2>Характеристики:</h2>

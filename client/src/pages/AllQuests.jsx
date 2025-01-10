@@ -38,7 +38,11 @@ const AllQuests = () => {
               <Card className="h-100 shadow-sm">
                 <Card.Img
                   variant="top"
-                  src={quest.image || 'https://via.placeholder.com/300'}
+                  src={
+                    quest.image
+                      ? `http://localhost:3000${quest.image}`
+                      : 'https://via.placeholder.com/300'
+                  }
                 />
                 <Card.Body>
                   <Card.Title>{quest.title}</Card.Title>

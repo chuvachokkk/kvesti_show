@@ -30,6 +30,7 @@ app.use('/api/quests', questRouter);
 app.use('/api/token', tokenRouter);
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads/quests', express.static(path.join(__dirname, '../uploads/quests')));
 
 app.listen(PORT, () => {
   console.log(`Server started at ${PORT} port`);

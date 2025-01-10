@@ -83,7 +83,7 @@ router.post(
       console.error('Ошибка при загрузке изображения:', error);
       res.status(500).json({ message: 'Ошибка сервера' });
     }
-  }
+  },
 );
 
 module.exports = router;

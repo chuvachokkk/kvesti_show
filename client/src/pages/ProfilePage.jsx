@@ -104,7 +104,7 @@ const ProfilePage = ({ user, updateUser }) => {
           <Col md={4} className="mb-4">
             <Card className="text-center p-3">
               <Image
-                src={ `http://localhost:3000${profileImage}`}
+                src={`http://localhost:3000${profileImage}`}
                 roundedCircle
                 fluid
                 className="mb-3"
@@ -163,7 +163,7 @@ const ProfilePage = ({ user, updateUser }) => {
                       <Card>
                         <Card.Img
                           variant="top"
-                          src={quest.image}
+                          src={`http://localhost:3000${quest.image}`}
                           alt={quest.title}
                         />
                         <Card.Body>

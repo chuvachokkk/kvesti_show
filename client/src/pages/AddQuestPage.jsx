@@ -20,6 +20,7 @@ const AddQuestPage = ({ onQuestAdded }) => {
   const [difficulty, setDifficulty] = useState(1);
   const [ageLimit, setAgeLimit] = useState(14);
   const [rating, setRating] = useState(1);
+  const [image, setImage] = useState(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const navigate = useNavigate();
@@ -27,30 +28,30 @@ const AddQuestPage = ({ onQuestAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Проверяем, что обязательные поля заполнены
     if (!title || !description) {
       setToastMessage('Название и описание квеста обязательны');
       setShowToast(true);
       return;
     }
 
-    // Создаем объект с данными для отправки
-    const questData = {
-      title,
-      description,
-      teamSize: Number(teamSize),
-      duration: Number(duration),
-      difficulty: Number(difficulty),
-      ageLimit: Number(ageLimit),
-      rating: Number(rating),
-    };
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('teamSize', teamSize);
+    formData.append('duration', duration);
+    formData.append('difficulty', difficulty);
+    formData.append('ageLimit', ageLimit);
+    formData.append('rating', rating);
+    if (image) {
+      formData.append('image', image);
+    }
 
     try {
       const accessToken = localStorage.getItem('accessToken');
-      const response = await axiosInstance.post('/quests', questData, {
+      const response = await axiosInstance.post('/quests', formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
       });
 
@@ -58,26 +59,15 @@ const AddQuestPage = ({ onQuestAdded }) => {
         setToastMessage('Квест успешно создан!');
         setShowToast(true);
 
-        // Проверяем, что onQuestAdded является функцией, перед вызовом
         if (typeof onQuestAdded === 'function') {
           onQuestAdded();
         }
 
-        setTimeout(() => navigate('/quests'), 2000); // Перенаправляем через 2 секунды
+        setTimeout(() => navigate('/quests'), 2000);
       }
     } catch (error) {
       console.error('Ошибка при создании квеста:', error);
-
-      // Отображаем сообщение об ошибке от сервера
-      if (error.response && error.response.data) {
-        console.error('Данные ответа сервера:', error.response.data);
-        setToastMessage(
-          error.response.data.message || 'Ошибка при создании квеста'
-        );
-      } else {
-        setToastMessage('Ошибка при создании квеста');
-      }
-
+      setToastMessage('Ошибка при создании квеста');
       setShowToast(true);
     }
   };
@@ -168,6 +158,14 @@ const AddQuestPage = ({ onQuestAdded }) => {
         <Form.Group className="mb-3" controlId="formRating">
           <Form.Label>Рейтинг</Form.Label>
           <StarRating rating={rating} setRating={setRating} />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formImage">
+          <Form.Label>Изображение</Form.Label>
+          <Form.Control
+            type="file"
+            onChange={(e) => setImage(e.target.files[0])}
+          />
         </Form.Group>
 
         <Button variant="primary" type="submit" className="w-100">
