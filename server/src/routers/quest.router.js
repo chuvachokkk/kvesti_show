@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { Quest } = require('../../db/models');
-const { verifyAccessToken } = require('../middleware/verifyToken');
+const { verifyAccessToken } = require('../middleware/verifyToken'); // Импортируем middleware
 
 // Получить все квесты
 router.get('/', async (req, res) => {
@@ -48,7 +48,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', verifyAccessToken, async (req, res) => {
   const {
     title,
-    description,
+    description, // Убедитесь, что description ожидается как строка
     teamSize,
     duration,
     difficulty,
@@ -56,13 +56,11 @@ router.post('/', verifyAccessToken, async (req, res) => {
     rating,
     image,
   } = req.body;
-  const authorId = res.locals.user.id;
 
-  // Проверяем обязательные поля
-  if (!title) {
+  if (!title || !description) {
     return res
       .status(400)
-      .json({ message: 'Название квеста обязательно', field: 'title' });
+      .json({ message: 'Название и описание квеста обязательны' });
   }
 
   try {
@@ -75,7 +73,7 @@ router.post('/', verifyAccessToken, async (req, res) => {
       ageLimit,
       rating,
       image,
-      authorId,
+      authorId: res.locals.user.id,
     });
 
     res.status(201).json(quest);
@@ -87,6 +85,7 @@ router.post('/', verifyAccessToken, async (req, res) => {
 
 // Обновить квест
 router.put('/:id', verifyAccessToken, async (req, res) => {
+  // Добавляем middleware verifyAccessToken
   const { id } = req.params;
   const {
     title,
@@ -98,17 +97,15 @@ router.put('/:id', verifyAccessToken, async (req, res) => {
     rating,
     image,
   } = req.body;
-  const authorId = res.locals.user.id;
+  const authorId = res.locals.user.id; // Теперь authorId будет доступен
 
   try {
     const quest = await Quest.findOne({ where: { id, authorId } });
 
     if (!quest) {
-      return res
-        .status(404)
-        .json({
-          message: 'Квест не найден или у вас нет прав на его изменение',
-        });
+      return res.status(404).json({
+        message: 'Квест не найден или у вас нет прав на его изменение',
+      });
     }
 
     // Обновляем поля, если они переданы
@@ -132,18 +129,17 @@ router.put('/:id', verifyAccessToken, async (req, res) => {
 
 // Удалить квест
 router.delete('/:id', verifyAccessToken, async (req, res) => {
+  // Добавляем middleware verifyAccessToken
   const { id } = req.params;
-  const authorId = res.locals.user.id;
+  const authorId = res.locals.user.id; // Теперь authorId будет доступен
 
   try {
     const quest = await Quest.findOne({ where: { id, authorId } });
 
     if (!quest) {
-      return res
-        .status(404)
-        .json({
-          message: 'Квест не найден или у вас нет прав на его удаление',
-        });
+      return res.status(404).json({
+        message: 'Квест не найден или у вас нет прав на его удаление',
+      });
     }
 
     await quest.destroy();

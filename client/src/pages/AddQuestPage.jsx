@@ -10,17 +10,16 @@ import {
 } from 'react-bootstrap';
 import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
-import StarRating from '../components/StarRating'; // Импортируем компонент рейтинга
+import StarRating from '../components/StarRating';
 
 const AddQuestPage = ({ onQuestAdded }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [teamSize, setTeamSize] = useState(1); // По умолчанию 1 человек
+  const [teamSize, setTeamSize] = useState(1);
   const [duration, setDuration] = useState(60);
-  const [difficulty, setDifficulty] = useState(1); // По умолчанию сложность 1
+  const [difficulty, setDifficulty] = useState(1);
   const [ageLimit, setAgeLimit] = useState(14);
-  const [image, setImage] = useState(null); // Состояние для загрузки изображения
-  const [rating, setRating] = useState(1); // Состояние для рейтинга
+  const [rating, setRating] = useState(1);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const navigate = useNavigate();
@@ -29,39 +28,41 @@ const AddQuestPage = ({ onQuestAdded }) => {
     e.preventDefault();
 
     // Проверяем, что обязательные поля заполнены
-    if (!title) {
-      setToastMessage('Название квеста обязательно');
+    if (!title || !description) {
+      setToastMessage('Название и описание квеста обязательны');
       setShowToast(true);
       return;
     }
 
-    const formData = new FormData();
-    formData.append('title', 'Test Quest');
-    formData.append('description', 'This is a test quest');
-    formData.append('teamSize', 2);
-    formData.append('duration', 60);
-    formData.append('difficulty', 3);
-    formData.append('ageLimit', 14);
-    formData.append('rating', 4);
-    if (image && !image.type.startsWith('image/')) {
-      setToastMessage('Пожалуйста, загрузите изображение');
-      setShowToast(true);
-      return;
-    }
+    // Создаем объект с данными для отправки
+    const questData = {
+      title,
+      description,
+      teamSize: Number(teamSize),
+      duration: Number(duration),
+      difficulty: Number(difficulty),
+      ageLimit: Number(ageLimit),
+      rating: Number(rating),
+    };
 
     try {
       const accessToken = localStorage.getItem('accessToken');
-      const response = await axiosInstance.post('/quests', formData, {
+      const response = await axiosInstance.post('/quests', questData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'multipart/form-data', // Указываем тип содержимого для загрузки файла
+          'Content-Type': 'application/json',
         },
       });
 
       if (response.status === 201) {
         setToastMessage('Квест успешно создан!');
         setShowToast(true);
-        onQuestAdded();
+
+        // Проверяем, что onQuestAdded является функцией, перед вызовом
+        if (typeof onQuestAdded === 'function') {
+          onQuestAdded();
+        }
+
         setTimeout(() => navigate('/quests'), 2000); // Перенаправляем через 2 секунды
       }
     } catch (error) {
@@ -69,6 +70,7 @@ const AddQuestPage = ({ onQuestAdded }) => {
 
       // Отображаем сообщение об ошибке от сервера
       if (error.response && error.response.data) {
+        console.error('Данные ответа сервера:', error.response.data);
         setToastMessage(
           error.response.data.message || 'Ошибка при создании квеста'
         );
@@ -77,13 +79,6 @@ const AddQuestPage = ({ onQuestAdded }) => {
       }
 
       setShowToast(true);
-    }
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file); // Сохраняем выбранный файл
     }
   };
 
@@ -137,7 +132,7 @@ const AddQuestPage = ({ onQuestAdded }) => {
             type="number"
             placeholder="Введите время квеста"
             value={duration}
-            onChange={(e) => setDuration(e.target.value)}
+            onChange={(e) => setDuration(Number(e.target.value))}
             required
           />
         </Form.Group>
@@ -165,7 +160,7 @@ const AddQuestPage = ({ onQuestAdded }) => {
             type="number"
             placeholder="Введите возрастное ограничение"
             value={ageLimit}
-            onChange={(e) => setAgeLimit(e.target.value)}
+            onChange={(e) => setAgeLimit(Number(e.target.value))}
             required
           />
         </Form.Group>
@@ -173,15 +168,6 @@ const AddQuestPage = ({ onQuestAdded }) => {
         <Form.Group className="mb-3" controlId="formRating">
           <Form.Label>Рейтинг</Form.Label>
           <StarRating rating={rating} setRating={setRating} />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formImage">
-          <Form.Label>Загрузить изображение</Form.Label>
-          <Form.Control
-            type="file"
-            onChange={handleImageChange}
-            accept="image/*"
-          />
         </Form.Group>
 
         <Button variant="primary" type="submit" className="w-100">

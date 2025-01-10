@@ -5,7 +5,6 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const path = require('path');
-const multer = require('multer');
 
 const authRouter = require('./routers/auth.router');
 const profileRouter = require('./routers/profile.router');
@@ -29,7 +28,8 @@ app.use('/api/auth', authRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/quests', questRouter);
 app.use('/api/token', tokenRouter);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.listen(PORT, () => {
   console.log(`Server started at ${PORT} port`);

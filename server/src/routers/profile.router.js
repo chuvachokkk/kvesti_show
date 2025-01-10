@@ -6,15 +6,21 @@ const { User } = require('../../db/models');
 const { verifyAccessToken } = require('../middleware/verifyToken');
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination(req, file, cb) {
     cb(null, 'uploads/'); // Файлы будут сохраняться в папку uploads
   },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Уникальное имя файла
+  filename(req, file, cb) {
+    cb(null, Date.now().toString() + path.extname(file.originalname)); // Уникальное имя файла
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
+
+router.get('/uploads/:filename', (req, res) => {
+  const { filename } = req.params;
+  const filePath = path.join(__dirname, 'uploads', filename);
+  res.sendFile(filePath);
+});
 
 // Обновление профиля
 router.put('/update', verifyAccessToken, async (req, res) => {
