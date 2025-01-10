@@ -1,17 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, Container, Image, Button } from 'react-bootstrap';
+import logo from '../image/123.webp';
 
 const Header = ({ user, isAuthenticated, logout }) => {
-  // Формируем URL для аватарки пользователя
   const avatarUrl = user?.avatar
     ? `http://localhost:3000${user.avatar}`
-    : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxh9E8dJUZ_tVqV-9FtvXsDV5MsAdFG8eaRA&s'; 
+    : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxh9E8dJUZ_tVqV-9FtvXsDV5MsAdFG8eaRA&s';
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
         <Navbar.Brand as={Link} to="/">
+          <img
+            src={logo}
+            alt="Логотип"
+            style={{ width: '50px', height: '50px' }}
+          />
           Квесты
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -34,7 +39,7 @@ const Header = ({ user, isAuthenticated, logout }) => {
                   className="d-flex align-items-center me-3"
                 >
                   <Image
-                    src={avatarUrl} // Используем сформированный URL для аватарки
+                    src={avatarUrl}
                     roundedCircle
                     style={{
                       width: '40px',

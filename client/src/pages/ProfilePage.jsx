@@ -49,7 +49,6 @@ const ProfilePage = ({ user, updateUser }) => {
         }
       );
 
-      // Обновляем данные пользователя
       const updatedUser = { ...user, username };
       updateUser(updatedUser);
 
@@ -81,7 +80,6 @@ const ProfilePage = ({ user, updateUser }) => {
           }
         );
 
-        // Обновляем данные пользователя
         const updatedUser = { ...user, avatar: response.data.imageUrl };
         updateUser(updatedUser);
 
@@ -165,6 +163,7 @@ const ProfilePage = ({ user, updateUser }) => {
                           variant="top"
                           src={`http://localhost:3000${quest.image}`}
                           alt={quest.title}
+                          style={{ height: '200px', objectFit: 'cover' }}
                         />
                         <Card.Body>
                           <Card.Title>{quest.title}</Card.Title>

@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Carousel, Card, Button } from 'react-bootstrap';
 import StarRating from '../components/StarRating';
-import { FaArrowRight } from 'react-icons/fa';
 
 const HomePage = () => {
   const featuredQuests = [
@@ -89,17 +88,6 @@ const HomePage = () => {
                   <StarRating rating={quest.rating} isEditable={false} />
                 </li>
               </ul>
-              {/* <Link to={`/quests/${quest.id}`}>
-                <Button
-                  variant="primary"
-                  style={{
-                    fontFamily: 'Roboto, sans-serif',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  Подробнее <FaArrowRight style={{ marginLeft: '5px' }} />
-                </Button>
-              </Link> */}
             </Carousel.Caption>
           </Carousel.Item>
         ))}

@@ -53,7 +53,7 @@ const CommentsSection = ({ questId }) => {
         }
       );
 
-      setComments([response.data, ...comments]); // Добавляем новый комментарий в начало списка
+      setComments([response.data, ...comments]);
       setNewComment('');
       setToastMessage('Комментарий успешно добавлен');
       setToastVariant('success');
@@ -107,7 +107,6 @@ const CommentsSection = ({ questId }) => {
               <strong>{comment.User.username}:</strong> {comment.text}
               <br />
               <small>{new Date(comment.createdAt).toLocaleString()}</small>
-              {/* Кнопка для удаления комментария */}
               <Button
                 variant="danger"
                 size="sm"
@@ -130,13 +129,11 @@ const CommentsSection = ({ questId }) => {
               required
             />
           </Form.Group>
-          <Button variant="primary" type="submit" className="mt-2">
+          <Button variant="primary" type="submit" className="mt-1">
             Отправить
           </Button>
         </Form>
       </Card.Body>
-
-      {/* Уведомления */}
       <ToastContainer
         position="middle-center"
         className="p-3"
