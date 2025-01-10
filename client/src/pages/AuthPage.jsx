@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Tabs, Tab, Form, Button, Container } from 'react-bootstrap';
 import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
+import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 
 const AuthPage = ({ login }) => {
   const [formData, setFormData] = useState({
@@ -44,21 +45,51 @@ const AuthPage = ({ login }) => {
   return (
     <Container
       className="d-flex justify-content-center align-items-center"
-      style={{ minHeight: '100vh' }}
+      style={{
+        minHeight: '100vh',
+        // background: 'linear-gradient(135deg,rgb(255, 255, 255), #2575fc)',
+        padding: '20px',
+      }}
     >
-      <div style={{ width: '100%', maxWidth: '400px' }}>
-        <h1 className="text-center">
+      <div
+        style={{
+          background: 'white',
+          padding: '30px',
+          borderRadius: '10px',
+          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+          width: '100%',
+          maxWidth: '400px',
+        }}
+      >
+        <h1
+          style={{
+            fontSize: '2rem',
+            marginBottom: '20px',
+            color: '#333',
+            textAlign: 'center',
+          }}
+        >
           {activeTab === 'login' ? 'Вход' : 'Регистрация'}
         </h1>
         <Tabs
           activeKey={activeTab}
           onSelect={(key) => setActiveTab(key)}
           className="mb-3"
+          style={{
+            borderBottom: 'none',
+          }}
         >
           <Tab eventKey="login" title="Вход">
             <Form onSubmit={handleSubmit}>
-              <Form.Group controlId="formEmail">
-                <Form.Label>Email</Form.Label>
+              <Form.Group
+                controlId="formEmail"
+                style={{ marginBottom: '20px' }}
+              >
+                <Form.Label
+                  style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+                >
+                  <FaEnvelope style={{ color: '#2575fc' }} /> Email
+                </Form.Label>
                 <Form.Control
                   type="email"
                   name="email"
@@ -66,11 +97,25 @@ const AuthPage = ({ login }) => {
                   value={formData.email}
                   onChange={handleChange}
                   required
+                  style={{
+                    borderRadius: '5px',
+                    border: '1px solid #ddd',
+                    padding: '10px',
+                    fontSize: '1rem',
+                    width: '100%',
+                  }}
                 />
               </Form.Group>
 
-              <Form.Group controlId="formPassword">
-                <Form.Label>Пароль</Form.Label>
+              <Form.Group
+                controlId="formPassword"
+                style={{ marginBottom: '20px' }}
+              >
+                <Form.Label
+                  style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+                >
+                  <FaLock style={{ color: '#2575fc' }} /> Пароль
+                </Form.Label>
                 <Form.Control
                   type="password"
                   name="password"
@@ -78,10 +123,29 @@ const AuthPage = ({ login }) => {
                   value={formData.password}
                   onChange={handleChange}
                   required
+                  style={{
+                    borderRadius: '5px',
+                    border: '1px solid #ddd',
+                    padding: '10px',
+                    fontSize: '1rem',
+                    width: '100%',
+                  }}
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit" className="w-100">
+              <Button
+                variant="primary"
+                type="submit"
+                style={{
+                  width: '100%',
+                  background: '#2575fc',
+                  border: 'none',
+                  padding: '10px',
+                  fontSize: '1.1rem',
+                  borderRadius: '5px',
+                  marginTop: '20px', // Увеличиваем отступ сверху
+                }}
+              >
                 Войти
               </Button>
             </Form>
@@ -89,8 +153,15 @@ const AuthPage = ({ login }) => {
 
           <Tab eventKey="register" title="Регистрация">
             <Form onSubmit={handleSubmit}>
-              <Form.Group controlId="formUsername">
-                <Form.Label>Имя пользователя</Form.Label>
+              <Form.Group
+                controlId="formUsername"
+                style={{ marginBottom: '20px' }}
+              >
+                <Form.Label
+                  style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+                >
+                  <FaUser style={{ color: '#2575fc' }} /> Имя пользователя
+                </Form.Label>
                 <Form.Control
                   type="text"
                   name="username"
@@ -98,11 +169,25 @@ const AuthPage = ({ login }) => {
                   value={formData.username}
                   onChange={handleChange}
                   required
+                  style={{
+                    borderRadius: '5px',
+                    border: '1px solid #ddd',
+                    padding: '10px',
+                    fontSize: '1rem',
+                    width: '100%',
+                  }}
                 />
               </Form.Group>
 
-              <Form.Group controlId="formEmail">
-                <Form.Label>Email</Form.Label>
+              <Form.Group
+                controlId="formEmail"
+                style={{ marginBottom: '20px' }}
+              >
+                <Form.Label
+                  style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+                >
+                  <FaEnvelope style={{ color: '#2575fc' }} /> Email
+                </Form.Label>
                 <Form.Control
                   type="email"
                   name="email"
@@ -110,11 +195,25 @@ const AuthPage = ({ login }) => {
                   value={formData.email}
                   onChange={handleChange}
                   required
+                  style={{
+                    borderRadius: '5px',
+                    border: '1px solid #ddd',
+                    padding: '10px',
+                    fontSize: '1rem',
+                    width: '100%',
+                  }}
                 />
               </Form.Group>
 
-              <Form.Group controlId="formPassword">
-                <Form.Label>Пароль</Form.Label>
+              <Form.Group
+                controlId="formPassword"
+                style={{ marginBottom: '20px' }}
+              >
+                <Form.Label
+                  style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+                >
+                  <FaLock style={{ color: '#2575fc' }} /> Пароль
+                </Form.Label>
                 <Form.Control
                   type="password"
                   name="password"
@@ -122,10 +221,29 @@ const AuthPage = ({ login }) => {
                   value={formData.password}
                   onChange={handleChange}
                   required
+                  style={{
+                    borderRadius: '5px',
+                    border: '1px solid #ddd',
+                    padding: '10px',
+                    fontSize: '1rem',
+                    width: '100%',
+                  }}
                 />
               </Form.Group>
 
-              <Button variant="primary" type="submit" className="w-100">
+              <Button
+                variant="primary"
+                type="submit"
+                style={{
+                  width: '100%',
+                  background: '#2575fc',
+                  border: 'none',
+                  padding: '10px',
+                  fontSize: '1.1rem',
+                  borderRadius: '5px',
+                  marginTop: '20px', // Увеличиваем отступ сверху
+                }}
+              >
                 Зарегистрироваться
               </Button>
             </Form>
