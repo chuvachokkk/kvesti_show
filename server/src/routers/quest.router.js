@@ -19,7 +19,20 @@ const upload = multer({ storage });
 // Получение всех квестов
 router.get('/', async (req, res) => {
   try {
-    const quests = await Quest.findAll();
+    const quests = await Quest.findAll({
+      attributes: [
+        'id',
+        'title',
+        'description',
+        'teamSize',
+        'duration',
+        'difficulty',
+        'ageLimit',
+        'rating',
+        'image',
+        'authorId',
+      ],
+    });
     res.json(quests);
   } catch (error) {
     console.error('Ошибка при получении квестов:', error);

@@ -1,7 +1,5 @@
-// routes/comments.router.js
-const express = require('express');
-const router = express.Router();
-const { Comment } = require('../../db/models');
+const router = require('express').Router();
+const { Comment, User } = require('../../db/models');
 const { verifyAccessToken } = require('../middleware/verifyToken');
 
 // Добавление комментария
@@ -12,7 +10,12 @@ router.post('/', verifyAccessToken, async (req, res) => {
 
     const comment = await Comment.create({ text, userId, questId });
 
-    res.status(201).json(comment);
+    // Включаем данные пользователя в ответ
+    const commentWithUser = await Comment.findByPk(comment.id, {
+      include: [{ model: User, attributes: ['username'] }],
+    });
+
+    res.status(201).json(commentWithUser);
   } catch (error) {
     console.error('Ошибка при добавлении комментария:', error);
     res.status(500).json({ message: 'Ошибка сервера' });
@@ -26,17 +29,24 @@ router.get('/:questId', async (req, res) => {
 
     const comments = await Comment.findAll({
       where: { questId },
-      include: [{ model: User, attributes: ['username'] }], // Включаем информацию о пользователе
+      include: [{ model: User, attributes: ['username'] }],
+      order: [['createdAt', 'DESC']], // Сортировка по дате создания
     });
 
-    res.json(comments);
+    // Преобразование даты в строковый формат
+    const commentsWithDate = comments.map((comment) => ({
+      ...comment.toJSON(),
+      createdAt: comment.createdAt.toLocaleString(), // Форматируем дату
+    }));
+
+    res.json(commentsWithDate);
   } catch (error) {
     console.error('Ошибка при получении комментариев:', error);
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 });
 
-// Удаление комментария
+// Удаление комментария (опционально)
 router.delete('/:id', verifyAccessToken, async (req, res) => {
   try {
     const { id } = req.params;
