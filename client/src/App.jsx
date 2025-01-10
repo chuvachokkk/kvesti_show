@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
@@ -10,34 +10,11 @@ import AuthPage from './pages/AuthPage';
 import AddQuestPage from './pages/AddQuestPage';
 import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './utils/ProtectedRoute';
-import EditQuestPage from './pages/EditQuestPage'; // Импортируем новую страницу
+import EditQuestPage from './pages/EditQuestPage';
+import { useAuth } from './utils/useAuth'; // Импортируем хук
 
 const App = () => {
-  const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
-  const login = (userData) => {
-    setUser(userData);
-    setIsAuthenticated(true);
-    localStorage.setItem('accessToken', userData.accessToken);
-  };
-
-  const logout = () => {
-    setUser(null);
-    setIsAuthenticated(false);
-    localStorage.removeItem('accessToken');
-  };
-
-  const updateUser = (updatedUser) => {
-    setUser(updatedUser);
-  };
+  const { user, isAuthenticated, login, logout, updateUser } = useAuth();
 
   return (
     <Router>

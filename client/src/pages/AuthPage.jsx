@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
-import {
-  Tabs,
-  Tab,
-  Form,
-  Button,
-  Toast,
-  ToastContainer,
-  Container,
-} from 'react-bootstrap';
+import { Tabs, Tab, Form, Button, Container } from 'react-bootstrap';
 import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 const AuthPage = ({ login }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    username: '',
+  });
   const [activeTab, setActiveTab] = useState('login');
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,32 +23,21 @@ const AuthPage = ({ login }) => {
     const endpoint = activeTab === 'login' ? '/auth/signin' : '/auth/signup';
     const data =
       activeTab === 'login'
-        ? { email, password }
-        : { username, email, password };
+        ? { email: formData.email, password: formData.password }
+        : {
+            username: formData.username,
+            email: formData.email,
+            password: formData.password,
+          };
 
     try {
       const response = await axiosInstance.post(endpoint, data);
       const { accessToken, user } = response.data;
 
       login({ ...user, accessToken });
-
-      setToastMessage(
-        activeTab === 'login'
-          ? 'Вход выполнен успешно!'
-          : 'Регистрация прошла успешно!'
-      );
-      setShowToast(true);
-
       navigate('/');
     } catch (error) {
-      console.error(
-        'Ошибка при авторизации:',
-        error.response ? error.response.data : error.message
-      );
-      setToastMessage(
-        'Ошибка при авторизации. Проверьте данные и попробуйте снова.'
-      );
-      setShowToast(true);
+      console.error('Ошибка при авторизации:', error);
     }
   };
 
@@ -75,9 +61,10 @@ const AuthPage = ({ login }) => {
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
+                  name="email"
                   placeholder="Введите email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={handleChange}
                   required
                 />
               </Form.Group>
@@ -86,9 +73,10 @@ const AuthPage = ({ login }) => {
                 <Form.Label>Пароль</Form.Label>
                 <Form.Control
                   type="password"
+                  name="password"
                   placeholder="Введите пароль"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  onChange={handleChange}
                   required
                 />
               </Form.Group>
@@ -105,9 +93,10 @@ const AuthPage = ({ login }) => {
                 <Form.Label>Имя пользователя</Form.Label>
                 <Form.Control
                   type="text"
+                  name="username"
                   placeholder="Введите имя пользователя"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  value={formData.username}
+                  onChange={handleChange}
                   required
                 />
               </Form.Group>
@@ -116,9 +105,10 @@ const AuthPage = ({ login }) => {
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
+                  name="email"
                   placeholder="Введите email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={handleChange}
                   required
                 />
               </Form.Group>
@@ -127,9 +117,10 @@ const AuthPage = ({ login }) => {
                 <Form.Label>Пароль</Form.Label>
                 <Form.Control
                   type="password"
+                  name="password"
                   placeholder="Введите пароль"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  onChange={handleChange}
                   required
                 />
               </Form.Group>
@@ -140,23 +131,6 @@ const AuthPage = ({ login }) => {
             </Form>
           </Tab>
         </Tabs>
-
-        <ToastContainer position="top-center" className="p-3">
-          <Toast
-            show={showToast}
-            onClose={() => setShowToast(false)}
-            delay={5000}
-            autohide
-            bg={toastMessage.includes('Ошибка') ? 'danger' : 'success'}
-          >
-            <Toast.Header closeButton>
-              <strong className="me-auto">
-                {toastMessage.includes('Ошибка') ? 'Ошибка' : 'Успех'}
-              </strong>
-            </Toast.Header>
-            <Toast.Body>{toastMessage}</Toast.Body>
-          </Toast>
-        </ToastContainer>
       </div>
     </Container>
   );

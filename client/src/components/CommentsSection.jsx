@@ -45,13 +45,10 @@ const CommentsSection = ({ questId }) => {
     try {
       const response = await axiosInstance.post(
         '/comments',
-        {
-          text: newComment,
-          questId,
-        },
+        { text: newComment, questId },
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`, // Добавляем токен в заголовок
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
@@ -63,18 +60,13 @@ const CommentsSection = ({ questId }) => {
       setShowToast(true);
     } catch (error) {
       console.error('Ошибка при добавлении комментария:', error);
-      if (error.response?.status === 401) {
-        setToastMessage('Для добавления комментария необходимо авторизоваться');
-        setToastVariant('danger');
-      } else {
-        setToastMessage('Произошла ошибка при добавлении комментария');
-        setToastVariant('danger');
-      }
+      setToastMessage('Произошла ошибка при добавлении комментария');
+      setToastVariant('danger');
       setShowToast(true);
     }
   };
 
-  // Функция для удаления комментария
+  // Удаление комментария
   const handleDelete = async (commentId) => {
     const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
@@ -119,7 +111,7 @@ const CommentsSection = ({ questId }) => {
               <Button
                 variant="danger"
                 size="sm"
-                className="ml-2"
+                className="ms-2"
                 onClick={() => handleDelete(comment.id)}
               >
                 Удалить

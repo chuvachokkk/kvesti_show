@@ -2,25 +2,28 @@ import React, { useState } from 'react';
 import { Form, Button, Row, Col, Container } from 'react-bootstrap';
 
 const AddQuestForm = () => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [teamSize, setTeamSize] = useState(2);
-  const [duration, setDuration] = useState(60);
-  const [difficulty, setDifficulty] = useState(1);
-  const [ageLimit, setAgeLimit] = useState(14);
-  const [image, setImage] = useState(null);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    teamSize: 2,
+    duration: 60,
+    difficulty: 1,
+    ageLimit: 14,
+    image: null,
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({
-      title,
-      description,
-      teamSize,
-      duration,
-      difficulty,
-      ageLimit,
-      image,
-    });
+    console.log(formData);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, image: e.target.files[0] });
   };
 
   return (
@@ -34,9 +37,10 @@ const AddQuestForm = () => {
           <Col sm={10}>
             <Form.Control
               type="text"
+              name="title"
               placeholder="Введите название квеста"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={formData.title}
+              onChange={handleChange}
               required
             />
           </Col>
@@ -50,9 +54,10 @@ const AddQuestForm = () => {
             <Form.Control
               as="textarea"
               rows={3}
+              name="description"
               placeholder="Введите описание квеста"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={formData.description}
+              onChange={handleChange}
               required
             />
           </Col>
@@ -64,8 +69,9 @@ const AddQuestForm = () => {
           </Form.Label>
           <Col sm={10}>
             <Form.Select
-              value={teamSize}
-              onChange={(e) => setTeamSize(Number(e.target.value))}
+              name="teamSize"
+              value={formData.teamSize}
+              onChange={handleChange}
               required
             >
               <option value={2}>2</option>
@@ -82,9 +88,10 @@ const AddQuestForm = () => {
           <Col sm={10}>
             <Form.Control
               type="number"
+              name="duration"
               placeholder="Введите время квеста"
-              value={duration}
-              onChange={(e) => setDuration(Number(e.target.value))}
+              value={formData.duration}
+              onChange={handleChange}
               required
             />
           </Col>
@@ -96,8 +103,9 @@ const AddQuestForm = () => {
           </Form.Label>
           <Col sm={10}>
             <Form.Select
-              value={difficulty}
-              onChange={(e) => setDifficulty(Number(e.target.value))}
+              name="difficulty"
+              value={formData.difficulty}
+              onChange={handleChange}
               required
             >
               <option value={1}>1</option>
@@ -116,9 +124,10 @@ const AddQuestForm = () => {
           <Col sm={10}>
             <Form.Control
               type="number"
+              name="ageLimit"
               placeholder="Введите возрастное ограничение"
-              value={ageLimit}
-              onChange={(e) => setAgeLimit(Number(e.target.value))}
+              value={formData.ageLimit}
+              onChange={handleChange}
               required
             />
           </Col>
@@ -129,11 +138,7 @@ const AddQuestForm = () => {
             Фотография
           </Form.Label>
           <Col sm={10}>
-            <Form.Control
-              type="file"
-              onChange={(e) => setImage(e.target.files[0])}
-              required
-            />
+            <Form.Control type="file" onChange={handleFileChange} required />
           </Col>
         </Form.Group>
 
